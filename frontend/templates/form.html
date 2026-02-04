@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Form</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<h2>Dynamic Employee Form</h2>
+<form id="employeeForm"></form>
+
+<button onclick="submitForm()">Submit</button>
+
+<script>
+const TOKEN = "";
+const FORM_ID = 1;
+
+axios.get(`/employee/forms/${FORM_ID}/`, {
+  headers: { Authorization: `Bearer ${TOKEN}` }
+}).then(res => {
+  const form = document.getElementById("employeeForm");
+
+  res.data.fields.forEach(field => {
+    const label = document.createElement("label");
+    label.innerText = field.label;
+
+    const input = document.createElement("input");
+    input.name = field.label;
+    input.type = field.field_type;
+
+    form.appendChild(label);
+    form.appendChild(document.createElement("br"));
+    form.appendChild(input);
+    form.appendChild(document.createElement("br"));
+  });
+});
+
+function submitForm() {
+  const inputs = document.querySelectorAll("input");
+  let data = {};
+
+  inputs.forEach(input => {
+    data[input.name] = input.value;
+  });
+
+  axios.post('/employee/employees/', {
+    form: FORM_ID,
+    data: data
+  }, {
+    headers: { Authorization: `Bearer ${TOKEN}` }
+  }).then(() => {
+    alert("Employee created!");
+  });
+}
+</script>
+
+</body>
+</html>
