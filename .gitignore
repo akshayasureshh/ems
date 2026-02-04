@@ -1,0 +1,7 @@
+# Postman
+.postman/
+postman/
+
+# Environment files
+*.postman_environment.json
+*.postman_globals.json
